@@ -1,0 +1,5 @@
+{
+  "provenance": "โจทย์เรขาคณิตคำนวณมือสำหรับทดสอบ ไม่ใช่ผลของ RCTankC",
+  "inputs": { "length_m": 10, "width_m": 5, "shallow_m": 1.2, "deep_m": 1.8, "wall_mm": 200, "slab_vertical_mm": 250, "water_from_deep_floor_m": 1.2 },
+  "expected": { "wall_concrete_m3": 9.24, "slab_concrete_m3": 14.04, "total_concrete_m3": 23.28, "water_m3": 45, "wall_formwork_m2": 92.4 }
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+artifacts/
+__pycache__/
+public/wasm/
+public/pdfjs/
+public/licenses/
+test-results/
+playwright-report/
+.DS_Store
+/reference/*.exe

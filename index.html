@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#123c32" />
+  <meta name="description" content="เครื่องมือวางแผนสระว่ายน้ำ ดูแบบ PDF และ IFC ถอดปริมาณรูปทรงเบื้องต้น" />
+  <title>Pool Studio · ออกแบบสระว่ายน้ำ</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+</head>
+<body data-mobile="project">
+  <header class="header">
+    <a class="brand" href="./" aria-label="หน้าแรก"><span class="brand-mark">▱</span><span>POOL<span class="brand-light">STUDIO</span><small>พื้นที่ทำงานโครงสร้างสระว่ายน้ำ</small></span></a>
+    <span class="project-label"><span class="status-dot"></span><span id="header-project"></span><span class="save-state" id="save-state">บันทึกในเครื่อง</span></span>
+    <div class="header-actions"><button id="theme" class="icon-button" aria-label="สลับโหมดมืด">☾</button><button id="backup" class="button light">สำรองข้อมูล</button><label class="button light" for="restore">กู้คืน JSON</label><input id="restore" type="file" accept=".json,application/json" hidden /><button id="print" class="button primary">↗ รายงาน / PDF</button></div>
+  </header>
+  <div class="workspace-bar"><div><span class="eyebrow">พื้นที่ทำงาน / สระว่ายน้ำ</span><h1>ออกแบบจากภาพรวม สู่ทุกรายละเอียด<span class="version-pill">เบื้องต้น</span></h1></div><div class="local-note"><span>◉</span> ไฟล์ประมวลผลในเบราว์เซอร์<br><small>ไม่อัปโหลด PDF / IFC ไปยังเซิร์ฟเวอร์</small></div></div>
+  <nav class="mobile-switch" aria-label="พื้นที่ทำงานบนมือถือ"><button id="mobile-project" class="active">ข้อมูลและแบบ</button><button id="mobile-model">โมเดล 3D</button></nav>
+  <main class="workspace">
+    <section class="left-panel" aria-label="แบบและข้อมูลโครงการ">
+      <nav class="tabs" aria-label="เครื่องมือโครงการ"><button class="tab active" data-tab="design">01 <span>ข้อมูลสระ</span></button><button class="tab" data-tab="pdf">02 <span>แบบ PDF</span></button><button class="tab" data-tab="results">03 <span>ปริมาณ / ตรวจสอบ</span></button></nav>
+      <div class="panel-scroll">
+        <section id="panel-design" class="tab-panel">
+          <div class="section-heading"><div><span class="eyebrow">ข้อมูลโครงการ</span><h2>เริ่มต้นที่รูปทรงสระ</h2></div><button id="sample" class="text-button">↻ ใช้ข้อมูลตัวอย่าง</button></div>
+          <p class="muted intro">กำหนดขนาดภายในสระ แล้วสำรวจโมเดลได้ทันที</p>
+          <form id="project-form" novalidate>
+            <label class="field full">ชื่อโครงการ<input name="name" maxlength="120" required /></label>
+            <div class="shape-card"><div class="shape-icon">▱</div><div><strong>สี่เหลี่ยมผืนผ้า · พื้นลาดตามยาว</strong><small>ผนังตั้งตรง ขอบบนอยู่ในระนาบเดียวกัน</small></div><span class="selected-check">✓</span></div>
+            <div class="form-section"><h3><span class="section-number">1</span>ขนาดและความลึก <span class="unit-tag">เมตร</span></h3><div class="fields" id="geometry-fields"></div></div>
+            <div class="form-section"><h3><span class="section-number">2</span>ความหนาโครงสร้าง</h3><div class="fields" id="thickness-fields"></div><p class="field-note">ค่าตัวอย่างใช้แสดงรูปทรงเท่านั้น ยังไม่ใช่ขนาดที่ออกแบบรับรอง</p></div>
+            <div class="form-section"><h3><span class="section-number">3</span>ระดับน้ำ <span class="unit-tag">เมตร</span></h3><div class="fields" id="water-fields"></div><p class="field-note">ระดับน้ำวัดจากพื้นด้านลึก ผิวน้ำเป็นแนวราบ</p></div>
+            <details class="engineering-input"><summary>ดิน วัสดุ เหล็กเสริม และแรงกระทำ <span>รอเกณฑ์ยืนยัน</span></summary><p class="field-note">เก็บเป็นข้อมูลผู้ใช้ ยังไม่นำไปตัดสินกำลังหรือความปลอดภัย</p><div class="fields" id="engineering-fields"></div><label class="field full">พื้นที่ / ข้อมูลแผ่นดินไหว<input name="seismic" placeholder="ยังไม่กำหนด — รอเกณฑ์มาตรฐาน" /></label></details>
+            <details class="engineering-input"><summary>ข้อมูลอ้างอิงจาก IFC</summary><p class="field-note">เลือกชื่อและวัสดุจากคุณสมบัติ IFC แล้วตรวจสอบก่อนนำมาใช้ ไม่แปลงชื่อวัสดุเป็นกำลังโดยอัตโนมัติ</p><div class="fields"><label class="field">ชื่อชั้น<input name="ifcStorey" placeholder="ยังไม่เลือกจาก IFC" /></label><label class="field">ชื่อวัสดุ<input name="ifcMaterial" placeholder="ยังไม่เลือกจาก IFC" /></label></div></details>
+            <div id="form-error" class="error" role="alert" hidden></div>
+            <button class="button primary full update-button" type="submit">อัปเดตโมเดลและปริมาณ <span>↗</span></button>
+          </form>
+          <div class="assumption"><span>ⓘ</span><p>แบบจำลองนี้ใช้ขนาดภายในและพื้นลาดเชิงเส้น ความหนาพื้นวัดในแนวดิ่ง ขอบสระเป็นวงแหวนด้านนอก ไม่รวมบันได ช่องเปิด และรายละเอียดรอยต่อ</p></div>
+        </section>
+        <section id="panel-pdf" class="tab-panel" hidden>
+          <div class="section-heading"><div><span class="eyebrow">แบบอ้างอิง</span><h2>ดูแบบ PDF</h2></div><span class="unit-tag">ไฟล์อยู่ในเครื่อง</span></div>
+          <label id="pdf-drop" class="dropzone" for="pdf-file"><span class="upload-icon">↥</span><strong>ลากแบบ PDF มาวางที่นี่</strong><small>หรือคลิกเลือกไฟล์ · ไม่เก็บไฟล์ถาวร</small><input id="pdf-file" type="file" accept=".pdf,application/pdf" hidden /></label>
+          <div id="pdf-tools" hidden><div class="pdf-toolbar"><button id="pdf-prev" class="icon-button" aria-label="หน้าก่อนหน้า">‹</button><span id="pdf-page-label"></span><button id="pdf-next" class="icon-button" aria-label="หน้าถัดไป">›</button><button id="pdf-out" class="icon-button" aria-label="ซูมออก">−</button><span id="pdf-zoom"></span><button id="pdf-in" class="icon-button" aria-label="ซูมเข้า">+</button></div><div class="pdf-toolbar"><button id="pdf-calibrate" class="button light">ตั้งสเกล 2 จุด</button><button id="pdf-measure" class="button light">วัดระยะ 2 จุด</button><span id="pdf-measurement" aria-live="polite"></span></div><p id="pdf-status" class="field-note" aria-live="polite"></p><div id="pdf-container" tabindex="0" aria-label="แบบ PDF เลื่อนดูได้"><canvas id="pdf-canvas"></canvas><svg id="pdf-overlay" aria-hidden="true"></svg></div>
+          <div id="calibration" hidden class="calibration"><label class="field">ระยะจริงระหว่างจุด (ม.)<input id="real-distance" type="number" min="0.001" step="any" /></label><button id="apply-scale" class="button primary">ยืนยันสเกล</button></div>
+          <details class="reference-settings"><summary>วางแบบเป็นแผ่นอ้างอิงใน 3D</summary><p class="field-note">ต้องตั้งสเกลก่อน การเปลี่ยนหน้าหรือไฟล์จะซ่อนแผ่นอ้างอิงเดิม</p><div class="fields"><label class="field">ตำแหน่ง X (ม.)<input id="ref-x" type="number" value="0" step="0.1" /></label><label class="field">ระดับ Y (ม.)<input id="ref-y" type="number" value="-2.5" step="0.1" /></label><label class="field">ตำแหน่ง Z (ม.)<input id="ref-z" type="number" value="0" step="0.1" /></label><label class="field">หมุน (องศา)<input id="ref-rotation" type="number" value="0" /></label><label class="field full">ความโปร่งใส<input id="ref-opacity" type="range" min="0.05" max="1" step="0.05" value="0.6" /></label></div><button id="pdf-to-3d" class="button primary">วาง / อัปเดตแบบในฉาก 3D</button><button id="hide-reference" class="text-button">ซ่อนแผ่นอ้างอิง</button></details></div>
+        </section>
+        <section id="panel-results" class="tab-panel" hidden>
+          <div class="section-heading"><div><span class="eyebrow">ภาพรวมข้อมูล</span><h2>ปริมาณและการตรวจสอบ</h2></div><button id="csv" class="button light">↓ CSV</button></div>
+          <div class="result-banner"><span>▧</span><div><strong>ปริมาณจากรูปทรงที่กำหนด</strong><p>ตรวจขนาดและสมมติฐานก่อนใช้ประมาณงาน</p></div></div><div id="quantities-table"></div>
+          <details class="formula-box"><summary>ดูสูตรและค่าที่ใช้</summary><div id="formula-content"></div></details>
+          <div class="section-heading engineering-heading"><div><span class="eyebrow">การตรวจทางวิศวกรรม</span><h2>สถานะการตรวจสอบ</h2></div><span class="pending-chip">รอข้อมูล</span></div>
+          <label class="field">วิธีอ้างอิง<select id="method"><option value="current">มาตรฐานปัจจุบัน — รอยืนยันฉบับ/เกณฑ์</option><option value="prototype" disabled>RCTankC — ยังไม่มีชุดผลอ้างอิง</option></select></label>
+          <div id="engineering-checks"></div>
+          <div class="blocked-note"><strong>ยังไม่สามารถสรุปผ่าน / ไม่ผ่าน</strong><p>ยังขาดมาตรฐานฉบับเต็มที่ตรวจยืนยัน สมมติฐานการรองรับ และกรณีโหลด ไม่มีการใช้ค่าจำลองเป็นผลออกแบบ</p></div>
+          <button id="compare" class="button light full">เทียบกับโปรแกรมต้นแบบ</button><p id="comparison-status" class="field-note" aria-live="polite"></p>
+          <details class="reference-settings"><summary>แหล่งมาตรฐานและสิ่งที่ยังไม่ทราบ</summary><p>แหล่งมาตรฐานไทยและ ACI ยังเข้าถึงไม่ได้จากเครือข่ายนี้ จึงยังไม่ยืนยันฉบับล่าสุดหรือสถานะบังคับใช้ในประเทศไทย</p><ul><li><a href="https://ratchakitcha.soc.go.th/" target="_blank" rel="noopener noreferrer">ราชกิจจานุเบกษา</a></li><li><a href="https://www.dpt.go.th/" target="_blank" rel="noopener noreferrer">กรมโยธาธิการและผังเมือง</a></li><li><a href="https://eit.or.th/" target="_blank" rel="noopener noreferrer">วิศวกรรมสถานแห่งประเทศไทย</a></li><li><a href="https://www.concrete.org/" target="_blank" rel="noopener noreferrer">American Concrete Institute</a></li></ul><p>ต้องตรวจสมการ โหลดแฟกเตอร์ กำลังวัสดุ รอยร้าว และกรณีโหลดก่อนเปิดใช้โหมดออกแบบ รายละเอียดอยู่ใน docs ของ repository</p></details>
+        </section>
+      </div>
+      <footer class="panel-footer"><span class="status-dot"></span> บันทึกเฉพาะพารามิเตอร์ในเบราว์เซอร์ <span>ไม่มีบัญชีผู้ใช้</span></footer>
+    </section>
+    <section class="right-panel" aria-label="โมเดลสามมิติ">
+      <div class="viewer-header"><div><span class="eyebrow">มุมมองแบบจำลอง</span><h2>สำรวจพื้นที่ในสามมิติ <span class="live-dot">สด</span></h2></div><div class="segmented"><button id="mode-pool" class="active">โมเดลสระ</button><button id="mode-ifc">โมเดล IFC</button></div></div>
+      <div class="viewer-area"><div id="viewer"></div><div id="viewer-fallback" hidden>เปิดใช้งาน WebGL เพื่อแสดงโมเดล 3D ส่วนแบบ PDF และปริมาณยังใช้งานได้</div><div class="view-presets"><button data-view="iso" class="active">ไอโซ</button><button data-view="top">บน</button><button data-view="front">หน้า</button><button data-view="side">ข้าง</button></div><div class="viewer-tools"><button id="fit" aria-label="จัดโมเดลให้อยู่กลางภาพ" title="จัดโมเดลกลางภาพ">⛶</button><button id="transparent" aria-label="สลับความโปร่งใส" aria-pressed="false" title="โปร่งใส">◫</button><button id="section" aria-label="เปิดหน้าตัด" aria-pressed="false" title="ตัดหน้าตัด">◩</button><button id="measure3d" aria-label="วัดระยะสามมิติ" aria-pressed="false" title="วัดระยะ">↔</button><button id="color-types" aria-label="แยกสีตามชนิด" aria-pressed="false" title="แยกสีตามชนิด">◈</button></div><div id="section-control" hidden><label>เลื่อนแนวตัด <input id="section-position" type="range" min="0" max="100" value="50" /></label></div><div class="viewer-caption"><span id="model-caption">สี่เหลี่ยมผืนผ้า · พื้นลาดตามยาว</span><span>หมุน: ลาก · ซูม: เลื่อน · แพน: คลิกขวาลาก</span></div><span class="axis-marker"><b>Y</b><i>Z</i><em>X</em></span><div id="loading" hidden><strong id="loading-text">กำลังอ่านโมเดล…</strong><progress id="ifc-progress" max="100" value="0"></progress><button id="cancel-ifc" class="text-button">ยกเลิก</button></div><div id="measure3d-result" class="measure-result" hidden aria-live="polite"></div></div>
+      <div class="model-stats"><div><span>ขนาดภายใน</span><strong id="stat-size"></strong><small>เมตร</small></div><div><span>ความลึกเฉลี่ย</span><strong id="stat-depth"></strong><small>เมตร</small></div><div><span>ปริมาตรน้ำ</span><strong id="stat-water"></strong><small>ลูกบาศก์เมตร</small></div><div><span>คอนกรีต</span><strong id="stat-concrete"></strong><small>ลูกบาศก์เมตร</small></div></div>
+      <div class="model-bottom"><div class="model-bottom-title"><div><h3>โมเดลและองค์ประกอบ</h3><p class="muted" id="ifc-summary">ดูรูปทรงสระ หรือเปิดไฟล์ IFC ของคุณ</p></div><div><button id="export-ifc" class="button light">↓ ส่งออก IFC4</button><label class="button primary" for="ifc-file">+ เปิด IFC</label><input id="ifc-file" type="file" accept=".ifc" hidden /></div></div><label id="ifc-drop" class="ifc-drop" for="ifc-file">▧ <span>ลากไฟล์ .ifc มาวาง · อ่านด้วย web-ifc ในเบราว์เซอร์</span><span>↗</span></label><div id="ifc-content" hidden><div class="ifc-tabs"><button id="tree-types" class="text-button">ตามชนิด</button><button id="tree-storeys" class="text-button">ตามชั้น</button></div><div class="ifc-columns"><div id="ifc-tree"></div><div id="ifc-properties"><p class="muted">คลิกองค์ประกอบเพื่อดูข้อมูล</p></div></div></div><div id="pool-selection" class="selection-note" aria-live="polite">คลิกผนังหรือพื้นในโมเดลเพื่อเลือกองค์ประกอบ</div></div>
+    </section>
+  </main>
+  <footer class="disclaimer"><span>ⓘ</span><p id="warning"></p></footer>
+  <div id="toast" role="status" hidden></div>
+  <dialog id="import-dialog"><form method="dialog"><div class="section-heading"><h2>นำข้อมูลจาก IFC มาใช้</h2><button class="icon-button" aria-label="ปิด">×</button></div><p>ข้อมูลที่พบแสดงตามไฟล์ต้นฉบับ ชื่อและหน่วยอาจต่างกัน ต้องเลือกค่าและตรวจหน่วยเองก่อนนำไปใช้ ไม่ดึงขนาดจากกรอบโมเดลมาแทนขนาดภายในโดยอัตโนมัติ</p><pre id="import-source"></pre><div class="fields"><label class="field">นำเข้าเป็นพารามิเตอร์<select id="import-key"></select></label><label class="field">ค่าที่ตรวจสอบแล้ว<input id="import-value" type="text" maxlength="160" /></label></div><button id="apply-import" type="button" class="button primary">ใช้ค่าที่ตรวจสอบแล้ว</button></form></dialog>
+  <article id="print-report" hidden></article>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
